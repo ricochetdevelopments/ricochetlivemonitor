@@ -49,14 +49,14 @@ const INITIAL_BOTS: Bot[] = [
   },
   {
     id: "bot-2",
-    name: "Telegram Bot",
+    name: "Custom Bot Hosting",
     status: "online",
     lastUpdate: `${TODAY} ${CURRENT_TIME}`,
     uptime: 99.2,
   },
   {
     id: "bot-3",
-    name: "API Server",
+    name: "Ricochet API",
     status: "offline",
     lastUpdate: `${TODAY} ${CURRENT_TIME}`,
     uptime: 85.3,
