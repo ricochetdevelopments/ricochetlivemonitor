@@ -1,108 +1,14 @@
-import { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { ArrowLeft, TrendingDown, AlertTriangle } from "lucide-react";
-
-interface DowntimeEstimate {
-  date: string;
-  incidents: number;
-  totalDowntime: number; // in minutes
-  affectedServices: string[];
-  severity: "low" | "medium" | "high";
-}
-
-const MOCK_DOWNTIME: Record<string, DowntimeEstimate[]> = {
-  "bot-1": [
-    {
-      date: "2024-01-20",
-      incidents: 1,
-      totalDowntime: 5,
-      affectedServices: ["Discord API"],
-      severity: "low",
-    },
-    {
-      date: "2024-01-19",
-      incidents: 0,
-      totalDowntime: 0,
-      affectedServices: [],
-      severity: "low",
-    },
-    {
-      date: "2024-01-18",
-      incidents: 2,
-      totalDowntime: 15,
-      affectedServices: ["Discord API", "Network"],
-      severity: "medium",
-    },
-    {
-      date: "2024-01-17",
-      incidents: 0,
-      totalDowntime: 0,
-      affectedServices: [],
-      severity: "low",
-    },
-    {
-      date: "2024-01-16",
-      incidents: 1,
-      totalDowntime: 45,
-      affectedServices: ["Discord API"],
-      severity: "high",
-    },
-  ],
-  "bot-2": [
-    {
-      date: "2024-01-20",
-      incidents: 0,
-      totalDowntime: 0,
-      affectedServices: [],
-      severity: "low",
-    },
-    {
-      date: "2024-01-19",
-      incidents: 1,
-      totalDowntime: 8,
-      affectedServices: ["Telegram API"],
-      severity: "low",
-    },
-  ],
-  "bot-3": [
-    {
-      date: "2024-01-20",
-      incidents: 3,
-      totalDowntime: 240,
-      affectedServices: ["Database", "Network", "API Server"],
-      severity: "high",
-    },
-    {
-      date: "2024-01-19",
-      incidents: 5,
-      totalDowntime: 180,
-      affectedServices: ["API Server"],
-      severity: "high",
-    },
-  ],
-  "bot-4": [
-    {
-      date: "2024-01-20",
-      incidents: 0,
-      totalDowntime: 0,
-      affectedServices: [],
-      severity: "low",
-    },
-  ],
-};
-
-const BOT_NAMES: Record<string, string> = {
-  "bot-1": "Discord Bot",
-  "bot-2": "Telegram Bot",
-  "bot-3": "API Server",
-  "bot-4": "Processing Worker",
-};
+import { useBotContext } from "@/context/BotContext";
 
 export default function Downtime() {
   const [searchParams] = useSearchParams();
   const botId = searchParams.get("bot") || "bot-1";
-  const botName = BOT_NAMES[botId] || "Unknown Bot";
-  const downtimes = MOCK_DOWNTIME[botId] || [];
+  const { bots, downtime } = useBotContext();
+  const bot = bots.find((b) => b.id === botId);
+  const botName = bot?.name || "Unknown Bot";
+  const downtimes = downtime[botId] || [];
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
