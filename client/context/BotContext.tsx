@@ -42,7 +42,7 @@ const CURRENT_TIME = `${String(NOW.getHours()).padStart(2, "0")}:${String(NOW.ge
 const INITIAL_BOTS: Bot[] = [
   {
     id: "bot-1",
-    name: "Discord Bot",
+    name: "Ricochet",
     status: "online",
     lastUpdate: `${TODAY} ${CURRENT_TIME}`,
     uptime: 98.5,
@@ -63,7 +63,7 @@ const INITIAL_BOTS: Bot[] = [
   },
   {
     id: "bot-4",
-    name: "Processing Worker",
+    name: "Server",
     status: "restarting",
     lastUpdate: `${TODAY} ${CURRENT_TIME}`,
     uptime: 92.1,
