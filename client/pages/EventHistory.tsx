@@ -1,101 +1,15 @@
 import { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { ArrowLeft, Search } from "lucide-react";
-
-interface Event {
-  id: string;
-  timestamp: string;
-  type: "status_change" | "restart" | "error" | "recovery";
-  message: string;
-  details: string;
-}
-
-const MOCK_EVENTS: Record<string, Event[]> = {
-  "bot-1": [
-    {
-      id: "e1",
-      timestamp: "2024-01-20 14:32:00",
-      type: "status_change",
-      message: "Status changed to Online",
-      details: "Bot connected successfully",
-    },
-    {
-      id: "e2",
-      timestamp: "2024-01-20 13:45:30",
-      type: "restart",
-      message: "Bot restarted",
-      details: "Scheduled maintenance restart completed",
-    },
-    {
-      id: "e3",
-      timestamp: "2024-01-20 12:15:00",
-      type: "error",
-      message: "Connection lost",
-      details: "Network timeout after 5 attempts",
-    },
-    {
-      id: "e4",
-      timestamp: "2024-01-20 12:16:00",
-      type: "recovery",
-      message: "Connection restored",
-      details: "Reconnected to service",
-    },
-  ],
-  "bot-2": [
-    {
-      id: "e5",
-      timestamp: "2024-01-20 14:31:45",
-      type: "status_change",
-      message: "Status changed to Online",
-      details: "Bot connected successfully",
-    },
-    {
-      id: "e6",
-      timestamp: "2024-01-20 10:22:00",
-      type: "restart",
-      message: "Bot restarted",
-      details: "Auto-restart after update",
-    },
-  ],
-  "bot-3": [
-    {
-      id: "e7",
-      timestamp: "2024-01-20 14:00:00",
-      type: "status_change",
-      message: "Status changed to Offline",
-      details: "Connection timeout",
-    },
-    {
-      id: "e8",
-      timestamp: "2024-01-20 13:58:00",
-      type: "error",
-      message: "Service unavailable",
-      details: "503 error from API server",
-    },
-  ],
-  "bot-4": [
-    {
-      id: "e9",
-      timestamp: "2024-01-20 14:35:20",
-      type: "restart",
-      message: "Bot restarting",
-      details: "Scheduled restart in progress",
-    },
-  ],
-};
-
-const BOT_NAMES: Record<string, string> = {
-  "bot-1": "Discord Bot",
-  "bot-2": "Telegram Bot",
-  "bot-3": "API Server",
-  "bot-4": "Processing Worker",
-};
+import { useBotContext } from "@/context/BotContext";
 
 export default function EventHistory() {
   const [searchParams] = useSearchParams();
   const botId = searchParams.get("bot") || "bot-1";
-  const botName = BOT_NAMES[botId] || "Unknown Bot";
-  const events = MOCK_EVENTS[botId] || [];
+  const { bots, events } = useBotContext();
+  const bot = bots.find((b) => b.id === botId);
+  const botName = bot?.name || "Unknown Bot";
+  const botEvents = events[botId] || [];
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredEvents = events.filter(
