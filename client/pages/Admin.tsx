@@ -1,21 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, CheckCircle, AlertCircle } from "lucide-react";
-
-type BotStatus = "online" | "offline" | "restarting";
-
-interface Bot {
-  id: string;
-  name: string;
-  status: BotStatus;
-}
-
-const INITIAL_BOTS: Bot[] = [
-  { id: "bot-1", name: "Discord Bot", status: "online" },
-  { id: "bot-2", name: "Telegram Bot", status: "online" },
-  { id: "bot-3", name: "API Server", status: "offline" },
-  { id: "bot-4", name: "Processing Worker", status: "restarting" },
-];
+import { useBotContext, BotStatus } from "@/context/BotContext";
 
 const ADMIN_CODE = "032374";
 
@@ -23,7 +9,7 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [bots, setBots] = useState<Bot[]>(INITIAL_BOTS);
+  const { bots, updateBotStatus } = useBotContext();
 
   const handleCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
