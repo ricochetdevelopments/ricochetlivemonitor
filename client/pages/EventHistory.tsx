@@ -12,7 +12,7 @@ export default function EventHistory() {
   const botEvents = events[botId] || [];
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEvents = events.filter(
+  const filteredEvents = botEvents.filter(
     (event) =>
       event.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.details.toLowerCase().includes(searchTerm.toLowerCase())
