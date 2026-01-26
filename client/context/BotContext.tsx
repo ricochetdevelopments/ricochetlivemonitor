@@ -141,6 +141,33 @@ export const BotProvider = ({ children }: { children: ReactNode }) => {
   const [events, setEvents] = useState<Record<string, Event[]>>(getInitialEvents);
   const [downtime, setDowntime] = useState<Record<string, DowntimeEstimate[]>>(getInitialDowntime);
 
+  // Persist bots to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("bot-monitor-bots", JSON.stringify(bots));
+    } catch (error) {
+      console.error("Failed to save bots to localStorage:", error);
+    }
+  }, [bots]);
+
+  // Persist events to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("bot-monitor-events", JSON.stringify(events));
+    } catch (error) {
+      console.error("Failed to save events to localStorage:", error);
+    }
+  }, [events]);
+
+  // Persist downtime to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("bot-monitor-downtime", JSON.stringify(downtime));
+    } catch (error) {
+      console.error("Failed to save downtime to localStorage:", error);
+    }
+  }, [downtime]);
+
   const updateBotStatus = (botId: string, newStatus: BotStatus) => {
     const bot = bots.find((b) => b.id === botId);
     if (!bot) return;
