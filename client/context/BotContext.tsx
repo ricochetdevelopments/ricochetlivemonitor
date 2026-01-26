@@ -70,20 +70,76 @@ const INITIAL_BOTS: Bot[] = [
   },
 ];
 
+const getInitialBots = (): Bot[] => {
+  if (typeof window === "undefined") return INITIAL_BOTS;
+
+  try {
+    const saved = localStorage.getItem("bot-monitor-bots");
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Failed to load bots from localStorage:", error);
+  }
+  return INITIAL_BOTS;
+};
+
+const getInitialEvents = (): Record<string, Event[]> => {
+  if (typeof window === "undefined") {
+    return {
+      "bot-1": [],
+      "bot-2": [],
+      "bot-3": [],
+      "bot-4": [],
+    };
+  }
+
+  try {
+    const saved = localStorage.getItem("bot-monitor-events");
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Failed to load events from localStorage:", error);
+  }
+  return {
+    "bot-1": [],
+    "bot-2": [],
+    "bot-3": [],
+    "bot-4": [],
+  };
+};
+
+const getInitialDowntime = (): Record<string, DowntimeEstimate[]> => {
+  if (typeof window === "undefined") {
+    return {
+      "bot-1": [],
+      "bot-2": [],
+      "bot-3": [],
+      "bot-4": [],
+    };
+  }
+
+  try {
+    const saved = localStorage.getItem("bot-monitor-downtime");
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Failed to load downtime from localStorage:", error);
+  }
+  return {
+    "bot-1": [],
+    "bot-2": [],
+    "bot-3": [],
+    "bot-4": [],
+  };
+};
+
 export const BotProvider = ({ children }: { children: ReactNode }) => {
-  const [bots, setBots] = useState<Bot[]>(INITIAL_BOTS);
-  const [events, setEvents] = useState<Record<string, Event[]>>({
-    "bot-1": [],
-    "bot-2": [],
-    "bot-3": [],
-    "bot-4": [],
-  });
-  const [downtime, setDowntime] = useState<Record<string, DowntimeEstimate[]>>({
-    "bot-1": [],
-    "bot-2": [],
-    "bot-3": [],
-    "bot-4": [],
-  });
+  const [bots, setBots] = useState<Bot[]>(getInitialBots);
+  const [events, setEvents] = useState<Record<string, Event[]>>(getInitialEvents);
+  const [downtime, setDowntime] = useState<Record<string, DowntimeEstimate[]>>(getInitialDowntime);
 
   const updateBotStatus = (botId: string, newStatus: BotStatus) => {
     const bot = bots.find((b) => b.id === botId);
