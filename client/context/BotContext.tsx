@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export type BotStatus = "online" | "offline" | "restarting";
 
@@ -138,8 +144,10 @@ const getInitialDowntime = (): Record<string, DowntimeEstimate[]> => {
 
 export const BotProvider = ({ children }: { children: ReactNode }) => {
   const [bots, setBots] = useState<Bot[]>(getInitialBots);
-  const [events, setEvents] = useState<Record<string, Event[]>>(getInitialEvents);
-  const [downtime, setDowntime] = useState<Record<string, DowntimeEstimate[]>>(getInitialDowntime);
+  const [events, setEvents] =
+    useState<Record<string, Event[]>>(getInitialEvents);
+  const [downtime, setDowntime] =
+    useState<Record<string, DowntimeEstimate[]>>(getInitialDowntime);
 
   // Persist bots to localStorage
   useEffect(() => {
