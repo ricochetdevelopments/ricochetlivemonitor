@@ -193,24 +193,39 @@ export const BotProvider = ({ children }: { children: ReactNode }) => {
 
   const updateBotStatus = async (botId: string, newStatus: BotStatus) => {
     const bot = bots.find((b) => b.id === botId);
-    if (!bot) return;
+    if (!bot) {
+      console.error("Bot not found:", botId);
+      return;
+    }
 
     const oldStatus = bot.status;
     const timestamp = `${TODAY} ${CURRENT_TIME}`;
 
     try {
       // Update on server
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       const response = await fetch(`/api/bots/${botId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus } as UpdateBotRequest),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error("Failed to update bot status");
+        const errorData = await response.text();
+        throw new Error(
+          `Failed to update bot status: ${response.status} ${errorData}`
+        );
       }
 
       const data = await response.json();
+
+      if (!data.bot) {
+        throw new Error("No bot data in response");
+      }
 
       // Update local state with server response
       setBots(bots.map((b) => (b.id === botId ? data.bot : b)));
