@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { Lock, CheckCircle, AlertCircle, Globe } from "lucide-react";
 import { useBotContext, BotStatus } from "@/context/BotContext";
+import type { Visitor } from "@shared/api";
 
 const ADMIN_CODE = "032374";
 
@@ -9,6 +10,9 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState<"bots" | "visitors">("bots");
+  const [visitors, setVisitors] = useState<Visitor[]>([]);
+  const [loadingVisitors, setLoadingVisitors] = useState(false);
   const { bots, updateBotStatus } = useBotContext();
 
   const handleCodeSubmit = (e: React.FormEvent) => {
