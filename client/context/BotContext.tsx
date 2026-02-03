@@ -125,11 +125,42 @@ const getInitialDowntime = (): Record<string, DowntimeEstimate[]> => {
 };
 
 export const BotProvider = ({ children }: { children: ReactNode }) => {
-  const [bots, setBots] = useState<Bot[]>(FALLBACK_BOTS);
-  const [events, setEvents] =
-    useState<Record<string, Event[]>>(getInitialEvents);
-  const [downtime, setDowntime] =
-    useState<Record<string, DowntimeEstimate[]>>(getInitialDowntime);
+  const [bots, setBots] = useState<Bot[]>(() => {
+    try {
+      return FALLBACK_BOTS;
+    } catch (error) {
+      console.error("Error initializing bots:", error);
+      return FALLBACK_BOTS;
+    }
+  });
+  const [events, setEvents] = useState<Record<string, Event[]>>(() => {
+    try {
+      return getInitialEvents();
+    } catch (error) {
+      console.error("Error initializing events:", error);
+      return {
+        "bot-1": [],
+        "bot-2": [],
+        "bot-3": [],
+        "bot-4": [],
+      };
+    }
+  });
+  const [downtime, setDowntime] = useState<Record<string, DowntimeEstimate[]>>(
+    () => {
+      try {
+        return getInitialDowntime();
+      } catch (error) {
+        console.error("Error initializing downtime:", error);
+        return {
+          "bot-1": [],
+          "bot-2": [],
+          "bot-3": [],
+          "bot-4": [],
+        };
+      }
+    }
+  );
   const [loading, setLoading] = useState(true);
 
   // Fetch bots from server on mount
