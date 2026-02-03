@@ -62,8 +62,17 @@ export default function Index() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Status Overview */}
-        <div className="mb-12">
+        {loading ? (
+          <div className="flex items-center justify-center py-24">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+              <p className="text-muted-foreground">Loading bot data...</p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Status Overview */}
+            <div className="mb-12">
           <h2 className="text-xl font-semibold text-foreground mb-6">
             Bot Status Overview
           </h2>
@@ -170,7 +179,9 @@ export default function Index() {
               </div>
             ))}
           </div>
-        </div>
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
