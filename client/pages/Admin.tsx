@@ -161,77 +161,158 @@ export default function Admin() {
         <div className="mb-8 flex items-center gap-3 p-4 rounded-lg bg-green-500/10 border border-green-500/20">
           <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
           <p className="text-sm text-green-400">
-            You are logged in as admin. You can now change bot statuses.
+            You are logged in as admin. You can now change bot statuses and view visitor data.
           </p>
         </div>
 
-        {/* Bot Controls */}
-        <div>
-          <h2 className="text-xl font-semibold text-foreground mb-6">
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-8 border-b border-border/40">
+          <button
+            onClick={() => setActiveTab("bots")}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "bots"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
             Bot Status Control
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bots.map((bot) => (
-              <div
-                key={bot.id}
-                className="bg-card rounded-lg border border-border overflow-hidden"
-              >
-                {/* Status Bar */}
-                <div className={`h-1 w-full ${getStatusColor(bot.status)}`} />
+          </button>
+          <button
+            onClick={() => setActiveTab("visitors")}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
+              activeTab === "visitors"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Globe className="w-4 h-4" />
+            Visitor Tracking
+          </button>
+        </div>
 
-                <div className="p-6">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {bot.name}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-3 h-3 rounded-full ${getStatusColor(bot.status)}`}
-                      />
-                      <span className="text-sm text-muted-foreground capitalize">
-                        Current: {bot.status}
-                      </span>
+        {/* Bot Controls Tab */}
+        {activeTab === "bots" && (
+          <div>
+            <h2 className="text-xl font-semibold text-foreground mb-6">
+              Bot Status Control
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {bots.map((bot) => (
+                <div
+                  key={bot.id}
+                  className="bg-card rounded-lg border border-border overflow-hidden"
+                >
+                  {/* Status Bar */}
+                  <div className={`h-1 w-full ${getStatusColor(bot.status)}`} />
+
+                  <div className="p-6">
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        {bot.name}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-3 h-3 rounded-full ${getStatusColor(bot.status)}`}
+                        />
+                        <span className="text-sm text-muted-foreground capitalize">
+                          Current: {bot.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Status Buttons */}
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => changeStatus(bot.id, "online")}
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          bot.status === "online"
+                            ? "bg-green-500 text-white"
+                            : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/20"
+                        }`}
+                      >
+                        Set Online
+                      </button>
+                      <button
+                        onClick={() => changeStatus(bot.id, "offline")}
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          bot.status === "offline"
+                            ? "bg-red-500 text-white"
+                            : "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
+                        }`}
+                      >
+                        Set Offline
+                      </button>
+                      <button
+                        onClick={() => changeStatus(bot.id, "restarting")}
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          bot.status === "restarting"
+                            ? "bg-amber-500 text-white"
+                            : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20"
+                        }`}
+                      >
+                        Set Restarting
+                      </button>
                     </div>
                   </div>
-
-                  {/* Status Buttons */}
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => changeStatus(bot.id, "online")}
-                      className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        bot.status === "online"
-                          ? "bg-green-500 text-white"
-                          : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/20"
-                      }`}
-                    >
-                      Set Online
-                    </button>
-                    <button
-                      onClick={() => changeStatus(bot.id, "offline")}
-                      className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        bot.status === "offline"
-                          ? "bg-red-500 text-white"
-                          : "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
-                      }`}
-                    >
-                      Set Offline
-                    </button>
-                    <button
-                      onClick={() => changeStatus(bot.id, "restarting")}
-                      className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        bot.status === "restarting"
-                          ? "bg-amber-500 text-white"
-                          : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20"
-                      }`}
-                    >
-                      Set Restarting
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Visitor Tracking Tab */}
+        {activeTab === "visitors" && (
+          <div>
+            <h2 className="text-xl font-semibold text-foreground mb-6">
+              Visitor Tracking
+            </h2>
+            {loadingVisitors ? (
+              <div className="flex items-center justify-center py-12">
+                <p className="text-muted-foreground">Loading visitor data...</p>
+              </div>
+            ) : visitors.length === 0 ? (
+              <div className="flex items-center justify-center py-12">
+                <p className="text-muted-foreground">No visitors tracked yet</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/40">
+                      <th className="px-4 py-3 text-left font-semibold text-foreground">
+                        IP Address
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold text-foreground">
+                        User Agent
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold text-foreground">
+                        Last Visit
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visitors.map((visitor, idx) => (
+                      <tr
+                        key={idx}
+                        className="border-b border-border/40 hover:bg-muted/50 transition-colors"
+                      >
+                        <td className="px-4 py-3 text-foreground font-mono">
+                          {visitor.ip}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground text-xs truncate max-w-xs">
+                          {visitor.userAgent}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground text-xs">
+                          {new Date(visitor.timestamp).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
