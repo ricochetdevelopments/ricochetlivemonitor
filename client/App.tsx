@@ -59,8 +59,6 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-import * as React from "react";
-
 export default function App() {
   return (
     <ErrorBoundary>
