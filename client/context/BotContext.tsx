@@ -326,9 +326,16 @@ export const BotProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useBotContext = () => {
-  const context = useContext(BotContext);
-  if (context === undefined) {
-    throw new Error("useBotContext must be used within BotProvider");
+  try {
+    const context = useContext(BotContext);
+    if (context === undefined) {
+      throw new Error(
+        "useBotContext must be used within BotProvider. Ensure the component is wrapped by <BotProvider> in App.tsx"
+      );
+    }
+    return context;
+  } catch (error) {
+    console.error("Error in useBotContext:", error);
+    throw error;
   }
-  return context;
 };
