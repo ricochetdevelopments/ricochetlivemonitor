@@ -15,6 +15,26 @@ export default function Admin() {
   const [loadingVisitors, setLoadingVisitors] = useState(false);
   const { bots, updateBotStatus } = useBotContext();
 
+  // Fetch visitors when tab changes
+  useEffect(() => {
+    if (isAuthenticated && activeTab === "visitors") {
+      const fetchVisitors = async () => {
+        setLoadingVisitors(true);
+        try {
+          const response = await fetch("/api/visitors");
+          const data = await response.json();
+          setVisitors(data.visitors);
+        } catch (error) {
+          console.error("Failed to fetch visitors:", error);
+        } finally {
+          setLoadingVisitors(false);
+        }
+      };
+
+      fetchVisitors();
+    }
+  }, [isAuthenticated, activeTab]);
+
   const handleCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
