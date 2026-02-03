@@ -159,7 +159,7 @@ export const BotProvider = ({ children }: { children: ReactNode }) => {
           "bot-4": [],
         };
       }
-    }
+    },
   );
   const [loading, setLoading] = useState(true);
 
@@ -330,7 +330,7 @@ export const useBotContext = () => {
     const context = useContext(BotContext);
     if (context === undefined) {
       throw new Error(
-        "useBotContext must be used within BotProvider. Ensure the component is wrapped by <BotProvider> in App.tsx"
+        "useBotContext must be used within BotProvider. Ensure the component is wrapped by <BotProvider> in App.tsx",
       );
     }
     return context;

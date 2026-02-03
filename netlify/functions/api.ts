@@ -110,10 +110,7 @@ function createServerApp() {
 
       const today = new Date().toLocaleDateString("en-CA");
       const currentHour = new Date().getHours().toString().padStart(2, "0");
-      const currentMinute = new Date()
-        .getMinutes()
-        .toString()
-        .padStart(2, "0");
+      const currentMinute = new Date().getMinutes().toString().padStart(2, "0");
       const currentTime = `${currentHour}:${currentMinute}`;
 
       botStates[id] = {
@@ -133,7 +130,7 @@ function createServerApp() {
   app.get("/api/visitors", (_req, res) => {
     try {
       const uniqueVisitors = Array.from(
-        new Map(visitors.reverse().map((v) => [v.ip, v])).values()
+        new Map(visitors.reverse().map((v) => [v.ip, v])).values(),
       ).reverse();
 
       res.json({ visitors: uniqueVisitors });
@@ -149,11 +146,11 @@ function createServerApp() {
       err: any,
       _req: express.Request,
       res: express.Response,
-      _next: express.NextFunction
+      _next: express.NextFunction,
     ) => {
       console.error("Unhandled error:", err);
       res.status(500).json({ error: "Internal server error" });
-    }
+    },
   );
 
   return app;
