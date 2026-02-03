@@ -41,6 +41,37 @@ const TODAY = new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD format
 const NOW = new Date();
 const CURRENT_TIME = `${String(NOW.getHours()).padStart(2, "0")}:${String(NOW.getMinutes()).padStart(2, "0")}:${String(NOW.getSeconds()).padStart(2, "0")}`;
 
+const FALLBACK_BOTS: Bot[] = [
+  {
+    id: "bot-1",
+    name: "Ricochet",
+    status: "online",
+    lastUpdate: `${TODAY} ${CURRENT_TIME}`,
+    uptime: 98.5,
+  },
+  {
+    id: "bot-2",
+    name: "Custom Bot Hosting",
+    status: "online",
+    lastUpdate: `${TODAY} ${CURRENT_TIME}`,
+    uptime: 99.2,
+  },
+  {
+    id: "bot-3",
+    name: "Ricochet API",
+    status: "online",
+    lastUpdate: `${TODAY} ${CURRENT_TIME}`,
+    uptime: 85.3,
+  },
+  {
+    id: "bot-4",
+    name: "Server",
+    status: "online",
+    lastUpdate: `${TODAY} ${CURRENT_TIME}`,
+    uptime: 92.1,
+  },
+];
+
 const getInitialEvents = (): Record<string, Event[]> => {
   if (typeof window === "undefined") {
     return {
